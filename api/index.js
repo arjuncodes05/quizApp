@@ -171,7 +171,7 @@ app.get('/api/topic/:topicName', async (req, res) => {
 });
 
 // Save a new quiz
-app.post('/save-quiz', async (req, res) => {
+app.post('/api/save-quiz', async (req, res) => {
     try {
         const { quizName, jsonData } = req.body;
 
