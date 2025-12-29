@@ -12,6 +12,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Update cors middleware in index.js
+app.use(cors({
+    origin: '*', // For now, allow all origins - tighten later
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight requests
+app.options('*', cors());
+
 // Predefined topics data
 const predefinedTopics = {
     temples: {
@@ -465,22 +475,22 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start server
-async function startServer() {
-    try {
-        // Test database connection
-        await testDBConnection();
+// // Start server
+// async function startServer() {
+//     try {
+//         // Test database connection
+//         await testDBConnection();
         
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-            console.log(`Database: MongoDB Atlas`);
-            console.log(`API Base URL: http://localhost:${PORT}/api`);
-        });
-    } catch (error) {
-        console.error('Failed to start server:', error);
-        process.exit(1);
-    }
-}
+//         app.listen(PORT, () => {
+//             console.log(`Server running at http://localhost:${PORT}`);
+//             console.log(`Database: MongoDB Atlas`);
+//             console.log(`API Base URL: http://localhost:${PORT}/api`);
+//         });
+//     } catch (error) {
+//         console.error('Failed to start server:', error);
+//         process.exit(1);
+//     }
+// }
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
@@ -495,7 +505,7 @@ process.on('SIGTERM', async () => {
     process.exit(0);
 });
 
-startServer();
+// startServer();
 
 // Export for Vercel
 module.exports = app;
