@@ -9,7 +9,8 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // Serve frontend files
+app.use(express.static(__dirname));
+
 
 // Paths
 const TOPICS_DIR = path.join(__dirname, 'topics');
@@ -23,22 +24,28 @@ async function ensureTopicsDir() {
     }
 }
 
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+
 // Get list of all topics
 app.get('/api/topics', async (req, res) => {
     try {
         await ensureTopicsDir();
-        
+
         const files = await fs.readdir(TOPICS_DIR);
         const topics = [];
-        
+
         // Add predefined topics
         const predefinedTopics = [
             { name: 'temples', displayName: 'Temples', isCustom: false },
             { name: 'classicalDance', displayName: 'Classical Dance', isCustom: false },
         ];
-        
+
         topics.push(...predefinedTopics);
-        
+
         // Add custom topics from files
         for (const file of files) {
             if (file.endsWith('.json')) {
@@ -53,7 +60,7 @@ app.get('/api/topics', async (req, res) => {
                 }
             }
         }
-        
+
         res.json(topics);
     } catch (error) {
         console.error('Error fetching topics:', error);
@@ -66,7 +73,7 @@ app.get('/api/topic/:topicName', async (req, res) => {
     try {
         const topicName = req.params.topicName;
         const filePath = path.join(TOPICS_DIR, `${topicName}.json`);
-        
+
         // Check if file exists
         try {
             await fs.access(filePath);
@@ -78,7 +85,7 @@ app.get('/api/topic/:topicName', async (req, res) => {
             }
             return res.status(404).json({ error: 'Topic not found' });
         }
-        
+
         // Read and parse the file
         const fileContent = await fs.readFile(filePath, 'utf8');
         const jsonData = JSON.parse(fileContent);
@@ -93,21 +100,21 @@ app.get('/api/topic/:topicName', async (req, res) => {
 app.post('/api/save-quiz', async (req, res) => {
     try {
         const { quizName, jsonData } = req.body;
-        
+
         if (!quizName || !jsonData) {
             return res.status(400).json({ error: 'Quiz name and JSON data are required' });
         }
-        
+
         await ensureTopicsDir();
-        
+
         // Clean the filename
         const cleanName = quizName
             .replace(/[^a-zA-Z0-9\s]/g, '')
             .replace(/\s+/g, '_')
             .toLowerCase();
-        
+
         const filePath = path.join(TOPICS_DIR, `${cleanName}.json`);
-        
+
         // Check if file already exists
         try {
             await fs.access(filePath);
@@ -115,12 +122,12 @@ app.post('/api/save-quiz', async (req, res) => {
         } catch {
             // File doesn't exist, continue
         }
-        
+
         // Write the file
         await fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
-        
-        res.json({ 
-            success: true, 
+
+        res.json({
+            success: true,
             message: 'Quiz saved successfully',
             filename: `${cleanName}.json`
         });
@@ -134,25 +141,25 @@ app.post('/api/save-quiz', async (req, res) => {
 app.delete('/api/delete-quiz', async (req, res) => {
     try {
         const { quizName } = req.body;
-        
+
         if (!quizName) {
             return res.status(400).json({ error: 'Quiz name is required' });
         }
-        
+
         const filePath = path.join(TOPICS_DIR, `${quizName}.json`);
-        
+
         // Check if file exists
         try {
             await fs.access(filePath);
         } catch {
             return res.status(404).json({ error: 'Quiz not found' });
         }
-        
+
         // Delete the file
         await fs.unlink(filePath);
-        
-        res.json({ 
-            success: true, 
+
+        res.json({
+            success: true,
             message: 'Quiz deleted successfully'
         });
     } catch (error) {
@@ -227,12 +234,15 @@ function getDemoData(topicName) {
             }
         ]
     };
-    
+
     return demoData[topicName] || null;
 }
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Topics directory: ${TOPICS_DIR}`);
-});
+// // Start server
+// app.listen(PORT, () => {
+//     console.log(`Server running at http://localhost:${PORT}`);
+//     console.log(`Topics directory: ${TOPICS_DIR}`);
+// });
+
+
+module.exports = app;
