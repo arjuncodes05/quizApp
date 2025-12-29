@@ -1,10 +1,8 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-
-console.log("hi");
+require('dotenv').config();
 class Database {
     constructor() {
         const uri = process.env.MONGODB_URI 
-        console.log(uri);
         this.client = new MongoClient(uri, {
             serverApi: {
                 version: ServerApiVersion.v1,

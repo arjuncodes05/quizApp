@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const database = require('../db/db.js');
+const database = require('./db/db.js');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -465,21 +466,21 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-// async function startServer() {
-//     try {
-//         // Test database connection
-//         await testDBConnection();
+async function startServer() {
+    try {
+        // Test database connection
+        await testDBConnection();
         
-//         app.listen(PORT, () => {
-//             console.log(`Server running at http://localhost:${PORT}`);
-//             console.log(`Database: MongoDB Atlas`);
-//             console.log(`API Base URL: http://localhost:${PORT}/api`);
-//         });
-//     } catch (error) {
-//         console.error('Failed to start server:', error);
-//         process.exit(1);
-//     }
-// }
+        app.listen(PORT, () => {
+            console.log(`Server running at http://localhost:${PORT}`);
+            console.log(`Database: MongoDB Atlas`);
+            console.log(`API Base URL: http://localhost:${PORT}/api`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+}
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
@@ -494,7 +495,7 @@ process.on('SIGTERM', async () => {
     process.exit(0);
 });
 
-// startServer();
+startServer();
 
 // Export for Vercel
 module.exports = app;
