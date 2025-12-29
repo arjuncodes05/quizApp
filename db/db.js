@@ -5,10 +5,6 @@ class Database {
     constructor() {
         const uri = process.env.MONGODB_URI 
         console.log(uri);
-        
-        // || 
-        // "mongodb+srv://arjuncodes05:<db_password>@cluster0.yge0qug.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-        
         this.client = new MongoClient(uri, {
             serverApi: {
                 version: ServerApiVersion.v1,

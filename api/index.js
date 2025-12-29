@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const database = require('./db/db.js');
+const database = require('../db/db.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -171,108 +171,124 @@ app.get('/api/topic/:topicName', async (req, res) => {
 });
 
 // Save a new quiz
-app.post('/api/save-quiz', async (req, res) => {
+app.post('/save-quiz', async (req, res) => {
     try {
         const { quizName, jsonData } = req.body;
 
+        /* ---------- BASIC VALIDATION ---------- */
         if (!quizName || !jsonData) {
-            return res.status(400).json({ 
-                success: false, 
-                error: 'Quiz name and JSON data are required' 
+            return res.status(400).json({
+                success: false,
+                error: 'Quiz name and JSON data are required'
             });
         }
 
-        // Validate JSON structure
         if (!Array.isArray(jsonData)) {
-            return res.status(400).json({ 
-                success: false, 
-                error: "JSON must be an array" 
+            return res.status(400).json({
+                success: false,
+                error: 'JSON must be an array'
             });
         }
 
-        // Validate each topic
+        /* ---------- DEEP STRUCTURE VALIDATION ---------- */
         for (let i = 0; i < jsonData.length; i++) {
             const topic = jsonData[i];
-            
+
             if (!topic.reading || !topic.test) {
-                return res.status(400).json({ 
-                    success: false, 
-                    error: `Topic ${i + 1} must have both 'reading' and 'test' properties` 
+                return res.status(400).json({
+                    success: false,
+                    error: `Topic ${i + 1} must have both 'reading' and 'test'`
                 });
             }
-            
-            if (!topic.reading.heading || !Array.isArray(topic.reading.points)) {
-                return res.status(400).json({ 
-                    success: false, 
-                    error: `Topic ${i + 1} reading must have 'heading' and 'points' array` 
+
+            if (
+                !topic.reading.heading ||
+                !Array.isArray(topic.reading.points)
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    error: `Topic ${i + 1} reading must have 'heading' and 'points' array`
                 });
             }
-            
+
             if (!Array.isArray(topic.test)) {
-                return res.status(400).json({ 
-                    success: false, 
-                    error: `Topic ${i + 1} test must be an array` 
+                return res.status(400).json({
+                    success: false,
+                    error: `Topic ${i + 1} test must be an array`
                 });
             }
-            
-            // Validate each question in test
+
             for (let j = 0; j < topic.test.length; j++) {
                 const question = topic.test[j];
-                
-                if (!question.question || !Array.isArray(question.options) || 
-                    typeof question.correctAnswer !== 'number') {
-                    return res.status(400).json({ 
-                        success: false, 
-                        error: `Topic ${i + 1}, Question ${j + 1} must have 'question', 'options' array, and 'correctAnswer' number` 
+
+                if (
+                    !question.question ||
+                    !Array.isArray(question.options) ||
+                    typeof question.correctAnswer !== 'number'
+                ) {
+                    return res.status(400).json({
+                        success: false,
+                        error: `Topic ${i + 1}, Question ${j + 1} is invalid`
                     });
                 }
-                
+
                 if (question.options.length < 2) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        error: `Topic ${i + 1}, Question ${j + 1} must have at least 2 options` 
+                    return res.status(400).json({
+                        success: false,
+                        error: `Topic ${i + 1}, Question ${j + 1} must have at least 2 options`
                     });
                 }
-                
-                if (question.correctAnswer < 0 || question.correctAnswer >= question.options.length) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        error: `Topic ${i + 1}, Question ${j + 1} has invalid correctAnswer index` 
+
+                if (
+                    question.correctAnswer < 0 ||
+                    question.correctAnswer >= question.options.length
+                ) {
+                    return res.status(400).json({
+                        success: false,
+                        error: `Topic ${i + 1}, Question ${j + 1} has invalid correctAnswer index`
                     });
                 }
             }
         }
 
-        // Clean the name
+        /* ---------- CLEAN QUIZ NAME ---------- */
         const cleanName = quizName
+            .trim()
             .replace(/[^a-zA-Z0-9\s_-]/g, '')
             .replace(/\s+/g, '_')
             .toLowerCase();
 
-        // Check if quiz already exists
-        const quizzesCollection = await database.getCollection('quizzes');
-        const existingQuiz = await quizzesCollection.findOne({ name: cleanName });
-        
-        if (existingQuiz) {
-            return res.status(400).json({ 
-                success: false, 
-                error: 'A quiz with this name already exists' 
+        if (!cleanName) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid quiz name after cleaning'
             });
         }
 
-        // Create new quiz
-        const newQuiz = {
+        /* ---------- DATABASE ---------- */
+        const quizzesCollection = await database.getCollection('quizzes');
+
+        // Check duplicate
+        const existingQuiz = await quizzesCollection.findOne({ name: cleanName });
+        if (existingQuiz) {
+            return res.status(400).json({
+                success: false,
+                error: 'A quiz with this name already exists'
+            });
+        }
+
+        /* ---------- INSERT ---------- */
+        await quizzesCollection.insertOne({
             name: cleanName,
             displayName: quizName,
             isCustom: true,
             topics: jsonData,
             createdAt: new Date(),
             updatedAt: new Date()
-        };
+        });
 
-        await quizzesCollection.insertOne(newQuiz);
-
-        res.json({
+        /* ---------- SUCCESS ---------- */
+        return res.status(200).json({
             success: true,
             message: 'Quiz saved successfully',
             quiz: {
@@ -281,23 +297,25 @@ app.post('/api/save-quiz', async (req, res) => {
                 isCustom: true
             }
         });
+
     } catch (error) {
         console.error('Error saving quiz:', error);
-        
-        // Handle duplicate key error
+
+        // Mongo duplicate key safety
         if (error.code === 11000) {
-            return res.status(400).json({ 
-                success: false, 
-                error: 'A quiz with this name already exists' 
+            return res.status(400).json({
+                success: false,
+                error: 'A quiz with this name already exists'
             });
         }
-        
-        res.status(500).json({ 
-            success: false, 
-            error: 'Failed to save quiz: ' + error.message 
+
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to save quiz'
         });
     }
 });
+
 
 // Delete a quiz
 app.delete('/api/delete-quiz', async (req, res) => {
@@ -447,21 +465,21 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-async function startServer() {
-    try {
-        // Test database connection
-        await testDBConnection();
+// async function startServer() {
+//     try {
+//         // Test database connection
+//         await testDBConnection();
         
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-            console.log(`Database: MongoDB Atlas`);
-            console.log(`API Base URL: http://localhost:${PORT}/api`);
-        });
-    } catch (error) {
-        console.error('Failed to start server:', error);
-        process.exit(1);
-    }
-}
+//         app.listen(PORT, () => {
+//             console.log(`Server running at http://localhost:${PORT}`);
+//             console.log(`Database: MongoDB Atlas`);
+//             console.log(`API Base URL: http://localhost:${PORT}/api`);
+//         });
+//     } catch (error) {
+//         console.error('Failed to start server:', error);
+//         process.exit(1);
+//     }
+// }
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
@@ -476,7 +494,7 @@ process.on('SIGTERM', async () => {
     process.exit(0);
 });
 
-startServer();
+// startServer();
 
 // Export for Vercel
 module.exports = app;

@@ -2,10 +2,10 @@
   "name": "whiskey-quiz-app",
   "version": "1.0.0",
   "description": "Static GK Quiz App with Backend",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node index.js",
+    "dev": "node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
