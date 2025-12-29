@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static GK</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="./img/lady.png" alt="">
+        </div>
+        <!-- Home Screen -->
+        <div class="screen home-screen active" id="home-screen">
+            <h1>Whiskey's Quiz App</h1>
+            <p class="subtitle">Select a topic to start</p>
+            <div class="topics-grid" id="topics-grid">
+                <!-- Topics will be loaded dynamically -->
+            </div>
+            
+            <!-- Add Custom Quiz Button -->
+            <div class="add-custom-section">
+                <button class="btn-add-custom" id="add-custom-btn">+ Add Custom Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Reading Screen -->
+        <div class="screen reading-screen" id="reading-screen">
+            <div class="counter" id="reading-counter">01/03</div>
+            <button class="btn-back" id="reading-back">← Back</button>
+            <h1 id="reading-heading">Reading Material</h1>
+            <div class="content">
+                <h2 id="reading-title"></h2>
+                <ul class="points" id="reading-points"></ul>
+            </div>
+            <button class="btn" id="start-quiz">Start Quiz</button>
+        </div>
+        
+        <!-- Quiz Screen -->
+        <div class="screen quiz-screen" id="quiz-screen">
+            <div class="counter" id="topic-counter">01/03</div>
+            <div class="counter" id="question-counter">Q: 01/05</div>
+            <div class="timer" id="timer">30s</div>
+            <button class="btn-back" id="quiz-back">← Back</button>
+            <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <h1 id="quiz-heading">Quiz Time</h1>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="warning" id="warning">Please select an option to continue</div>
+            <div class="quiz-buttons">
+                <button class="btn btn-end-quiz" id="end-quiz">End Quiz</button>
+                <button class="btn btn-skip" id="skip-question">Skip Question</button>
+                <button class="btn btn-next" id="next-question" disabled>Next Question</button>
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div class="screen results-screen" id="results-screen">
+            <h1>Quiz Completed!</h1>
+            <p>Your final score:</p>
+            <div class="score" id="final-score">0/9</div>
+            
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="result-number" id="total-questions">0</div>
+                    <div class="result-label">Total Questions</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="attempted-questions">0</div>
+                    <div class="result-label">Attempted</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="skipped-questions">0</div>
+                    <div class="result-label">Skipped</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="correct-answers">0</div>
+                    <div class="result-label">Correct</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="time-taken">00:00:00</div>
+                    <div class="result-label">Time Taken</div>
+                </div>
+                <div class="result-item result-percentage">
+                    <div class="result-number" id="percentage-score">0%</div>
+                    <div class="result-label">Percentage</div>
+                </div>
+            </div>
+            
+            <button class="btn restart" id="restart">Restart Quiz</button>
+            <button class="btn btn-home" id="back-to-home">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="click-sound" src="./audios/click.mp3"></audio>
+    <audio id="correct-sound" src="./audios/correct.mp3"></audio>
+    <audio id="incorrect-sound" src="./audios/wrong.mp3"></audio>
+    <audio id="complete-sound" src="./audios/complete.mp3"></audio>
+    <audio id="timer-sound" src="#"></audio>
+
+    <!-- Custom Quiz Modal -->
+    <div class="modal" id="custom-quiz-modal">
+        <div class="modal-content">
+            <h2>Add Custom Quiz</h2>
+            <div class="form-group">
+                <label for="quiz-name">Quiz Name:</label>
+                <input type="text" id="quiz-name" placeholder="Enter a name for your quiz" class="form-input">
+                <div class="error-message" id="name-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="json-data">Paste your JSON data:</label>
+                <textarea id="json-data" class="form-textarea" placeholder='Paste your JSON here...
+Example:
+[
+  {
+    "reading": {
+      "heading": "My Custom Topic",
+      "points": [
+        "Point 1",
+        "Point 2"
+      ]
+    },
+    "test": [
+      {
+        "question": "Sample question?",
+        "options": ["Option A", "Option B", "Option C", "Option D"],
+        "correctAnswer": 0
+      }
+    ]
+  }
+]'></textarea>
+                <div class="error-message" id="json-error"></div>
+            </div>
+            <div class="success-message" id="success-message"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" id="cancel-custom">Cancel</button>
+                <button class="btn btn-save" id="save-custom">Save Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Add this in your HTML where you want the toggle image feature -->
+        <div class="image-toggle-container">
+            <div class="button-container">
+                <div id="showImageBtn" class="toggle-btn show-btn">Arjun has a greeting for you! Click here to view it.</div>
+                <button id="hideImageBtn" class="toggle-btn hide-btn" style="display: none;">Click here to get these flowers delivered to your heart. 🌸</button>
+            </div>
+            
+            <div id="imageContainer" class="image-container" style="display: none;">
+                <div class="image-wrapper">
+                    <img id="displayedImage" src="./img/flowers.jpg" alt="Sample Image">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

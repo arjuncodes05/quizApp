@@ -1,0 +1,130 @@
+[
+    {
+        "reading": {
+            "heading": "The Eight Classical Dances of India",
+            "points": [
+                "Classical dances in India are deeply rooted in the ancient text 'Natya Shastra' by Bharata Muni.",
+                "The Sangeet Natak Akademi confers classical status. There are eight recognized classical dance forms.",
+                "Each dance form originates from a different region and often depicts stories from Hindu mythology.",
+                "Key elements include mudras (hand gestures), abhinaya (expression), and precise footwork."
+            ]
+        },
+        "test": [
+            {
+                "question": "Which ancient text is the foundational source for all Indian classical dances?",
+                "options": [
+                    "Geeta Govinda",
+                    "Natya Shastra",
+                    "Vedas",
+                    "Upanishads"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "How many dance forms are officially recognized as 'classical' by the Sangeet Natak Akademi?",
+                "options": [
+                    "Six",
+                    "Seven",
+                    "Eight",
+                    "Nine"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Bharatanatyam and Kathak",
+            "points": [
+                "Bharatanatyam: Originates from Tamil Nadu. It was traditionally performed by temple dancers (Devadasis). Known for its fixed upper torso, bent legs, and sophisticated gestures.",
+                "Kathak: Originates from North India (Uttar Pradesh, Rajasthan). The name derives from 'Katha' meaning story. It evolved during the Bhakti movement and was later influenced by Persian culture in Mughal courts. Known for its pirouettes and ankle bells (ghungroos)."
+            ]
+        },
+        "test": [
+            {
+                "question": "Bharatanatyam, a classical dance form, is associated with which state of India?",
+                "options": [
+                    "Kerala",
+                    "Tamil Nadu",
+                    "Andhra Pradesh",
+                    "Karnataka"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "The classical dance form 'Kathak' is characterized by its:",
+                "options": [
+                    "Sharp and angular movements",
+                    "Graceful swaying of the torso",
+                    "Intricate footwork and spins",
+                    "Use of elaborate masks"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Kathakali and Odissi",
+            "points": [
+                "Kathakali: Comes from Kerala. It is a highly stylized dance-drama known for its elaborate and colorful makeup, costumes, and masks. It often depicts stories from the epics Ramayana and Mahabharata.",
+                "Odissi: Originates from Odisha. It is a lyrical dance form known for its fluidity and tribhanga posture (a three-bend stance). It has strong associations with the temples of Bhubaneshwar and Puri."
+            ]
+        },
+        "test": [
+            {
+                "question": "Which classical dance form is known for its elaborate and colorful facial makeup?",
+                "options": [
+                    "Manipuri",
+                    "Kathakali",
+                    "Kuchipudi",
+                    "Sattriya"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "The tribhanga posture is a distinctive feature of which classical dance?",
+                "options": [
+                    "Bharatanatyam",
+                    "Kathak",
+                    "Odissi",
+                    "Mohiniyattam"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Other Classical Forms",
+            "points": [
+                "Kuchipudi: From Andhra Pradesh. It is a dance-drama where actors sing and dance. Known for its brisk movements and the famous trick of dancing on the rim of a brass plate.",
+                "Manipuri: From Manipur. It is known for its graceful, fluid movements and is often centered on themes of Radha and Krishna's Raslila.",
+                "Sattriya: From Assam. It was introduced by the Vaishnava saint Sankardeva and was traditionally performed by male monks in monasteries (Sattras).",
+                "Mohiniyattam: From Kerala. The name means 'dance of the enchantress'. It is a solo dance known for its graceful, swaying movements."
+            ]
+        },
+        "test": [
+            {
+                "question": "The dance form that involves dancing on the rim of a brass plate is:",
+                "options": [
+                    "Bharatanatyam",
+                    "Kathak",
+                    "Kuchipudi",
+                    "Odissi"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "Sattriya, a classical dance form, originated in which state?",
+                "options": [
+                    "Assam",
+                    "West Bengal",
+                    "Bihar",
+                    "Odisha"
+                ],
+                "correctAnswer": 0
+            }
+        ]
+    }
+]

@@ -1,0 +1,179 @@
+[
+    {
+        "reading": {
+            "heading": "The Kailashnath Temple, Ellora",
+            "points": [
+                "It is Cave 16 of the Ellora Caves, located in Maharashtra.",
+                "It is renowned for being the largest monolithic rock-cut temple in the world.",
+                "It was built by Krishna I (c. 756-773 CE) of the Rashtrakuta Dynasty.",
+                "The temple is dedicated to Lord Shiva and is designed to resemble Mount Kailash, his Himalayan abode.",
+                "Its architecture is a marvel of the Dravidian style, featuring a gopuram (gateway), a Nandi shrine, and intricate sculptures depicting scenes from Hindu epics."
+            ]
+        },
+        "test": [
+            {
+                "question": "The Kailashnath Temple at Ellora was built by which dynasty?",
+                "options": [
+                    "Chola Dynasty",
+                    "Rashtrakuta Dynasty",
+                    "Chalukya Dynasty",
+                    "Pallava Dynasty"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "What is the most distinctive feature of the Kailashnath Temple's construction?",
+                "options": [
+                    "It is built with red sandstone",
+                    "It is the tallest temple in India",
+                    "It is carved out of a single monolithic rock",
+                    "It is a floating temple on a lake"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "The Kailashnath Temple is dedicated to which deity?",
+                "options": [
+                    "Lord Vishnu",
+                    "Goddess Parvati",
+                    "Lord Shiva",
+                    "Lord Brahma"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Brihadeeswara Temple, Thanjavur",
+            "points": [
+                "Also known as the 'Big Temple', it is located in Thanjavur, Tamil Nadu.",
+                "It was built by the great Chola emperor Rajaraja I in 1010 CE.",
+                "The temple is a part of the UNESCO World Heritage Site known as the 'Great Living Chola Temples'.",
+                "Its vimana (tower over the sanctum sanctorum) is 66 meters tall and is one of the tallest in the world.",
+                "A unique architectural feature is that the shadow of the vimana never falls on the ground at noon.",
+                "The temple complex houses a massive statue of Nandi (the sacred bull of Shiva) carved from a single stone."
+            ]
+        },
+        "test": [
+            {
+                "question": "The Brihadeeswara Temple was built by which Chola ruler?",
+                "options": [
+                    "Rajendra Chola I",
+                    "Karikala Chola",
+                    "Rajaraja Chola I",
+                    "Vijayalaya Chola"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "Which of the following is a unique feature of the Brihadeeswara Temple's vimana?",
+                "options": [
+                    "It is made of marble",
+                    "It is painted in gold",
+                    "Its shadow does not fall on the ground at noon",
+                    "It has 1000 pillars"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "The Brihadeeswara Temple is a part of which UNESCO World Heritage Site?",
+                "options": [
+                    "Group of Monuments at Mahabalipuram",
+                    "Great Living Chola Temples",
+                    "Champaner-Pavagadh Archaeological Park",
+                    "Pattadakal Monuments"
+                ],
+                "correctAnswer": 1
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Virupaksha Temple, Hampi",
+            "points": [
+                "It is located in the ruins of Hampi, in Karnataka, part of the UNESCO World Heritage Site.",
+                "The temple is dedicated to Lord Shiva, worshipped here as Virupaksha, the consort of the local goddess Pampa.",
+                "It is the oldest and the principal temple in Hampi, with a history stretching back to the 7th century CE.",
+                "The temple was greatly expanded during the Vijayanagara Empire (14th-16th century).",
+                "The temple complex features a massive gateway (gopuram), several courtyards, a 100-pillar hall, and a unique inverted shadow of the main gopuram formed in a dark room."
+            ]
+        },
+        "test": [
+            {
+                "question": "The Virupaksha Temple is located in which ancient city?",
+                "options": [
+                    "Pattadakal",
+                    "Hampi",
+                    "Madurai",
+                    "Kanchipuram"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "Virupaksha Temple is primarily associated with which empire?",
+                "options": [
+                    "Chola Empire",
+                    "Vijayanagara Empire",
+                    "Mauryan Empire",
+                    "Gupta Empire"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "To which deity is the Virupaksha Temple dedicated?",
+                "options": [
+                    "Lord Vishnu",
+                    "Goddess Durga",
+                    "Lord Shiva",
+                    "Lord Ganesha"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "reading": {
+            "heading": "Jagannath Temple, Puri",
+            "points": [
+                "It is a famous Hindu temple dedicated to Lord Jagannath (a form of Vishnu/Krishna), his sister Subhadra, and his brother Balabhadra.",
+                "Located in Puri, Odisha, it is one of the four sacred Char Dham pilgrimage sites for Hindus.",
+                "The temple is famous for its annual Rath Yatra (Chariot Festival), where the deities are pulled on massive chariots.",
+                "The temple's kitchen is one of the largest in the world, and the Mahaprasad (offering to the Lord) is renowned.",
+                "A unique feature is that the flag atop the temple always flaps in the opposite direction of the wind."
+            ]
+        },
+        "test": [
+            {
+                "question": "The Jagannath Temple of Puri is dedicated to a form of which god?",
+                "options": [
+                    "Shiva",
+                    "Vishnu/Krishna",
+                    "Brahma",
+                    "Ganesha"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "Which famous festival is associated with the Jagannath Temple?",
+                "options": [
+                    "Ganesh Chaturthi",
+                    "Rath Yatra",
+                    "Navratri",
+                    "Maha Shivratri"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "The Jagannath Temple is one of the four sites of which pilgrimage circuit?",
+                "options": [
+                    "Dwadash Jyotirlinga",
+                    "Char Dham",
+                    "Sapta Puri",
+                    "Panch Kedar"
+                ],
+                "correctAnswer": 1
+            }
+        ]
+    }
+]
