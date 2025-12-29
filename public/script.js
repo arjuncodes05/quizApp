@@ -107,7 +107,7 @@ async function saveQuizToBackend(quizName, jsonData) {
                 jsonData: jsonData
             })
         });
-        
+
         if (!response.ok) throw new Error('Failed to save quiz');
         return await response.json();
     } catch (error) {
@@ -126,7 +126,7 @@ async function deleteQuizFromBackend(quizName) {
             },
             body: JSON.stringify({ quizName: quizName })
         });
-        
+
         if (!response.ok) throw new Error('Failed to delete quiz');
         return await response.json();
     } catch (error) {
@@ -164,13 +164,13 @@ async function loadAndDisplayTopics() {
 // Display topics in grid
 function displayTopics(topics) {
     topicsGrid.innerHTML = '';
-    
+
     topics.forEach(topic => {
         const topicItem = document.createElement('div');
         topicItem.className = `topic-item ${topic.isCustom ? 'custom-topic' : ''}`;
         topicItem.setAttribute('data-topic', topic.name);
         topicItem.textContent = topic.displayName || topic.name;
-        
+
         // Add delete button for custom topics
         if (topic.isCustom) {
             const deleteBtn = document.createElement('button');
@@ -183,12 +183,12 @@ function displayTopics(topics) {
             });
             topicItem.appendChild(deleteBtn);
         }
-        
+
         // Add click event
         topicItem.addEventListener('click', () => {
             selectTopic(topic.name);
         });
-        
+
         topicsGrid.appendChild(topicItem);
     });
 }
@@ -206,12 +206,12 @@ async function selectTopic(topicName) {
     try {
         // Update URL
         window.history.replaceState({}, '', `?topic=${topicName}`);
-        
+
         // Load topic data
         studyData = await loadTopicFromBackend(topicName);
         calculateTotalQuestions();
         currentTopic = topicName;
-        
+
         showReadingScreen();
     } catch (error) {
         console.error('Error loading topic:', error);
@@ -226,7 +226,7 @@ async function selectTopic(topicName) {
 // Delete a topic
 async function deleteTopic(topicName) {
     if (!confirm(`Are you sure you want to delete "${topicName}"?`)) return;
-    
+
     try {
         await deleteQuizFromBackend(topicName);
         playSound(clickSound);
@@ -243,46 +243,46 @@ async function deleteTopic(topicName) {
 function isValidJSON(jsonString) {
     try {
         const json = JSON.parse(jsonString);
-        
+
         // Validate the structure
         if (!Array.isArray(json)) {
             return { valid: false, error: "JSON must be an array" };
         }
-        
+
         // Check each topic
         for (let i = 0; i < json.length; i++) {
             const topic = json[i];
-            
+
             if (!topic.reading || !topic.test) {
                 return { valid: false, error: `Topic ${i + 1} must have both 'reading' and 'test' properties` };
             }
-            
+
             if (!topic.reading.heading || !Array.isArray(topic.reading.points)) {
                 return { valid: false, error: `Topic ${i + 1} reading must have 'heading' and 'points' array` };
             }
-            
+
             if (!Array.isArray(topic.test)) {
                 return { valid: false, error: `Topic ${i + 1} test must be an array` };
             }
-            
+
             // Check each question
             for (let j = 0; j < topic.test.length; j++) {
                 const question = topic.test[j];
-                
+
                 if (!question.question || !Array.isArray(question.options) || typeof question.correctAnswer !== 'number') {
                     return { valid: false, error: `Topic ${i + 1}, Question ${j + 1} must have 'question', 'options' array, and 'correctAnswer' number` };
                 }
-                
+
                 if (question.options.length < 2) {
                     return { valid: false, error: `Topic ${i + 1}, Question ${j + 1} must have at least 2 options` };
                 }
-                
+
                 if (question.correctAnswer < 0 || question.correctAnswer >= question.options.length) {
                     return { valid: false, error: `Topic ${i + 1}, Question ${j + 1} has invalid correctAnswer index` };
                 }
             }
         }
-        
+
         return { valid: true, data: json };
     } catch (error) {
         return { valid: false, error: "Invalid JSON format: " + error.message };
@@ -293,7 +293,7 @@ function isValidJSON(jsonString) {
 async function saveCustomQuiz() {
     const name = quizNameInput.value.trim();
     const jsonString = jsonDataInput.value.trim();
-    
+
     // Reset messages
     nameError.textContent = '';
     nameError.classList.remove('show');
@@ -301,7 +301,7 @@ async function saveCustomQuiz() {
     jsonError.classList.remove('show');
     successMessage.textContent = '';
     successMessage.classList.remove('show');
-    
+
     // Validate name
     if (!name) {
         nameError.textContent = 'Please enter a quiz name';
@@ -309,7 +309,7 @@ async function saveCustomQuiz() {
         playSound(incorrectSound);
         return;
     }
-    
+
     // Validate JSON
     if (!jsonString) {
         jsonError.textContent = 'Please paste JSON data';
@@ -317,7 +317,7 @@ async function saveCustomQuiz() {
         playSound(incorrectSound);
         return;
     }
-    
+
     const validation = isValidJSON(jsonString);
     if (!validation.valid) {
         jsonError.textContent = validation.error;
@@ -325,20 +325,20 @@ async function saveCustomQuiz() {
         playSound(incorrectSound);
         return;
     }
-    
+
     try {
         // Save to backend
         const result = await saveQuizToBackend(name, validation.data);
-        
+
         if (result.success) {
             // Show success message
             successMessage.textContent = 'Quiz saved successfully!';
             successMessage.classList.add('show');
             playSound(correctSound);
-            
+
             // Refresh topic list
             await loadAndDisplayTopics();
-            
+
             // Clear form and close modal after delay
             setTimeout(() => {
                 quizNameInput.value = '';
@@ -367,17 +367,17 @@ async function initApp() {
     try {
         // Load topics
         await loadAndDisplayTopics();
-        
+
         // Check URL for topic parameter
         const urlParams = new URLSearchParams(window.location.search);
         const topicFromUrl = urlParams.get('topic');
-        
+
         if (topicFromUrl) {
             await selectTopic(topicFromUrl);
         }
-        
+
         setupEventListeners();
-        
+
     } catch (error) {
         console.error('Error initializing app:', error);
         // Fallback to home screen
@@ -392,15 +392,15 @@ function setupEventListeners() {
         customQuizModal.classList.add('active');
         playSound(clickSound);
     });
-    
+
     cancelCustomBtn.addEventListener('click', () => {
         customQuizModal.classList.remove('active');
         resetModal();
         playSound(clickSound);
     });
-    
+
     saveCustomBtn.addEventListener('click', saveCustomQuiz);
-    
+
     // Close modal on outside click
     customQuizModal.addEventListener('click', (e) => {
         if (e.target === customQuizModal) {
@@ -408,7 +408,7 @@ function setupEventListeners() {
             resetModal();
         }
     });
-    
+
     // Original quiz event listeners
     startQuizButton.addEventListener('click', startQuiz);
     nextQuestionButton.addEventListener('click', goToNextQuestion);
@@ -418,7 +418,7 @@ function setupEventListeners() {
     backToHomeButton.addEventListener('click', goToHome);
     readingBackButton.addEventListener('click', goToHome);
     quizBackButton.addEventListener('click', goToReadingScreen);
-    
+
     // Audio feedback
     const buttons = document.querySelectorAll('.btn');
     buttons.forEach(button => {
@@ -520,7 +520,7 @@ function calculateTotalQuestions() {
 // Play sound function
 function playSound(audioElement) {
     console.log("Playing sound:", audioElement.id);
-    
+
     // Reset and play the sound
     audioElement.currentTime = 0;
     audioElement.play().catch(error => {
@@ -542,16 +542,16 @@ function showHomeScreen() {
 function showReadingScreen() {
     const topic = studyData[currentTopicIndex];
     readingTitle.textContent = topic.reading.heading;
-    
+
     readingCounter.textContent = `${formatNumber(currentTopicIndex + 1)}/${formatNumber(studyData.length)}`;
-    
+
     readingPoints.innerHTML = '';
     topic.reading.points.forEach(point => {
         const li = document.createElement('li');
         li.textContent = point;
         readingPoints.appendChild(li);
     });
-    
+
     homeScreen.classList.remove('active');
     readingScreen.classList.add('active');
     quizScreen.classList.remove('active');
@@ -586,7 +586,7 @@ function startQuiz() {
     quizScreen.classList.add('active');
     resultsScreen.classList.remove('active');
     resumeQuizTimer();
-    
+
     if (!quizTimerInterval) {
         startQuizTimer();
     }
@@ -599,21 +599,21 @@ function startQuiz() {
 function showQuestion() {
     const topic = studyData[currentTopicIndex];
     const question = topic.test[currentQuestionIndex];
-    
+
     questionCounter.textContent = `Q: ${formatNumber(currentQuestionIndex + 1)}/${formatNumber(topic.test.length)}`;
-    
+
     const progress = ((currentQuestionIndex + 1) / topic.test.length) * 100;
     progressBar.style.width = `${progress}%`;
-    
+
     questionElement.textContent = question.question;
-    
+
     optionsContainer.innerHTML = '';
     feedbackElement.textContent = '';
     feedbackElement.className = 'feedback';
     nextQuestionButton.disabled = true;
     selectedOption = null;
     warningElement.style.display = 'none';
-    
+
     question.options.forEach((option, index) => {
         const div = document.createElement('div');
         div.className = 'option';
@@ -622,25 +622,25 @@ function showQuestion() {
         div.addEventListener('click', selectOption);
         optionsContainer.appendChild(div);
     });
-    
+
     startQuestionTimer();
 }
 
 // Select option
 function selectOption(e) {
     if (selectedOption !== null) return;
-    
+
     stopQuestionTimer();
     selectedOption = parseInt(e.target.dataset.index);
     const topic = studyData[currentTopicIndex];
     const question = topic.test[currentQuestionIndex];
-    
+
     const options = optionsContainer.querySelectorAll('.option');
     options.forEach(option => option.classList.remove('selected'));
     e.target.classList.add('selected');
-    
+
     attemptedQuestions++;
-    
+
     if (selectedOption === question.correctAnswer) {
         e.target.classList.add('correct');
         feedbackElement.textContent = 'Correct! Well done.';
@@ -655,7 +655,7 @@ function selectOption(e) {
         feedbackElement.classList.add('incorrect-feedback');
         playSound(incorrectSound);
     }
-    
+
     nextQuestionButton.disabled = false;
     warningElement.style.display = 'none';
 }
@@ -696,23 +696,23 @@ function goToNextQuestion() {
 function showResultsScreen() {
     stopQuestionTimer();
     stopQuizTimer();
-    
+
     const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-    
+
     finalScoreElement.textContent = `${correctAnswers}/${totalQuestions}`;
-    
+
     totalQuestionsElement.textContent = totalQuestions;
     attemptedQuestionsElement.textContent = attemptedQuestions;
     skippedQuestionsElement.textContent = skippedQuestions;
     correctAnswersElement.textContent = correctAnswers;
     timeTakenElement.textContent = formatTime(totalElapsedTime);
     percentageScoreElement.textContent = `${percentage}%`;
-    
+
     homeScreen.classList.remove('active');
     readingScreen.classList.remove('active');
     quizScreen.classList.remove('active');
     resultsScreen.classList.add('active');
-    
+
     playSound(completeSound);
 }
 
@@ -727,10 +727,10 @@ function restartQuiz() {
     correctAnswers = 0;
     totalElapsedTime = 0;
     timeRemaining = 30;
-    
+
     stopQuestionTimer();
     stopQuizTimer();
-    
+
     showReadingScreen();
 }
 
@@ -775,7 +775,7 @@ function stopQuizTimer() {
             const timeSinceResume = Math.floor((now - lastResumeTime) / 1000);
             totalElapsedTime += timeSinceResume;
         }
-        
+
         clearInterval(quizTimerInterval);
         quizTimerInterval = null;
         lastResumeTime = null;
@@ -827,43 +827,43 @@ window.addEventListener('load', initApp);
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const showBtn = document.getElementById('showImageBtn');
     const hideBtn = document.getElementById('hideImageBtn');
     const imageContainer = document.getElementById('imageContainer');
     const displayedImage = document.getElementById('displayedImage');
-    
+
     const originalText = "Arjun has a greeting for you! Click here to view it.";
     const temporaryText = "Delivered to you heart, hope you can feel it 😊";
-    
+
     // Function to temporarily change text for 10 seconds
     function changeTextTemporarily() {
         showBtn.textContent = temporaryText;
-        
+
         // Revert back after 10 seconds
         setTimeout(() => {
             showBtn.textContent = originalText;
         }, 10000); // 10 seconds = 10000 milliseconds
     }
-    
+
     // Show image with fade-in
-    showBtn.addEventListener('click', function() {
+    showBtn.addEventListener('click', function () {
         imageContainer.style.display = 'block';
         imageContainer.style.animation = 'fadeIn 0.5s ease';
         showBtn.style.display = 'none';
         hideBtn.style.display = 'block';
-        
+
         // Change text when image is shown
         changeTextTemporarily();
     });
-    
+
     // Hide image with fade-out
-    hideBtn.addEventListener('click', function() {
+    hideBtn.addEventListener('click', function () {
         // Add fade-out animation
         imageContainer.style.animation = 'fadeOut 0.5s ease forwards';
-        
+
         // Wait for animation to complete before hiding
-        setTimeout(function() {
+        setTimeout(function () {
             imageContainer.style.display = 'none';
             hideBtn.style.display = 'none';
             showBtn.style.display = 'block';
@@ -871,6 +871,151 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+
+
+// In your existing script.js, update these functions:
+
+// Fetch all topics from backend
+async function fetchAllTopics() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/topics`);
+        if (!response.ok) throw new Error('Failed to fetch topics');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching topics:', error);
+        return [];
+    }
+}
+
+// Load a specific topic from backend
+async function loadTopicFromBackend(topicName) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/topic/${topicName}`);
+        if (!response.ok) throw new Error('Failed to load topic');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error loading topic:', error);
+        throw error;
+    }
+}
+
+// Delete a topic - Update to match new API response
+async function deleteTopic(topicName) {
+    if (!confirm(`Are you sure you want to delete "${topicName}"?`)) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/delete-quiz`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quizName: topicName })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to delete quiz');
+        }
+
+        if (result.success) {
+            playSound(clickSound);
+            await loadAndDisplayTopics(); // Refresh topic list
+        } else {
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        alert(`Error deleting quiz: ${error.message}`);
+        playSound(incorrectSound);
+    }
+}
+
+// Save custom quiz - Update to match new API response
+async function saveCustomQuiz() {
+    const name = quizNameInput.value.trim();
+    const jsonString = jsonDataInput.value.trim();
+
+    // Reset messages
+    nameError.textContent = '';
+    nameError.classList.remove('show');
+    jsonError.textContent = '';
+    jsonError.classList.remove('show');
+    successMessage.textContent = '';
+    successMessage.classList.remove('show');
+
+    // Validate name
+    if (!name) {
+        nameError.textContent = 'Please enter a quiz name';
+        nameError.classList.add('show');
+        playSound(incorrectSound);
+        return;
+    }
+
+    // Validate JSON
+    if (!jsonString) {
+        jsonError.textContent = 'Please paste JSON data';
+        jsonError.classList.add('show');
+        playSound(incorrectSound);
+        return;
+    }
+
+    const validation = isValidJSON(jsonString);
+    if (!validation.valid) {
+        jsonError.textContent = validation.error;
+        jsonError.classList.add('show');
+        playSound(incorrectSound);
+        return;
+    }
+
+    try {
+        // Save to backend
+        const response = await fetch(`${API_BASE_URL}/api/save-quiz`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quizName: name,
+                jsonData: validation.data
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save quiz');
+        }
+
+        if (result.success) {
+            // Show success message
+            successMessage.textContent = 'Quiz saved successfully!';
+            successMessage.classList.add('show');
+            playSound(correctSound);
+
+            // Refresh topic list
+            await loadAndDisplayTopics();
+
+            // Clear form and close modal after delay
+            setTimeout(() => {
+                quizNameInput.value = '';
+                jsonDataInput.value = '';
+                nameError.textContent = '';
+                jsonError.textContent = '';
+                successMessage.classList.remove('show');
+                customQuizModal.classList.remove('active');
+            }, 2000);
+        } else {
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        jsonError.textContent = 'Error saving quiz: ' + error.message;
+        jsonError.classList.add('show');
+        playSound(incorrectSound);
+    }
+}
 
 
 

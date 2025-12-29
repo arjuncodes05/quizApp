@@ -9,7 +9,10 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/server.js"
+      "dest": "server.js"
     }
-  ]
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_atlas_uri"
+  }
 }
